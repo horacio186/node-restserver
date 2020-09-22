@@ -2,8 +2,12 @@
 require('./config/config');
 
 const express = require('express')
+    // libreria de mongodb
+const mongoose = require('mongoose');
+
 const app = express()
 
+// parsear con json los servicios rest
 const bodyParser = require('body-parser')
 
 //agregar un analizador genérico de JSON y con codificación URL
@@ -13,45 +17,20 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-// obtener datos
-app.get('/usuario', (req, res) => {
-    res.json('get usuario')
+// hacer referencia al archivo usuario.js (servicios o controladores) de las rutas del usuario
+app.use(require('./routes/usuario.js'));
 
-})
 
-// crear nuevo registro
-app.post('/usuario', (req, res) => {
-
-    let body = req.body;
-
-    if (body.nombre === undefined) {
-        // mensaje al desarrollador que consume nuestra api, 400 que faltan parametros
-        res.status(400).json({
-            ok: false,
-            mensaje: 'El nombre es necesario'
-        });
-
-    } else {}
-    res.json({
-        persona: body
+// conectar a la BD de MONGODB
+mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useCreateIndex: true },
+    (err, res) => {
+        // si hay error
+        if (err) throw err;
+        // caso contrario
+        console.log('Base de datos ONLINE');
     });
-})
 
-// actualizar nuevo registro
-app.put('/usuario/:id', (req, res) => {
-
-    let id = req.params.id;
-    res.json({
-        id
-    });
-});
-
-// crear nuevo registro
-app.delete('/usuario', (req, res) => {
-    res.json('delete usuario')
-
-})
-
+//mongoose.connect('mongodb://localhost:27017/cafe', { useNewUrlParser: true, useCreateIndex: true });
 
 app.listen(process.env.PORT, () => {
 
