@@ -17,8 +17,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+// AQUI va la Configuración global de rutas """"""""""""""""""""""""22
 // hacer referencia al archivo usuario.js (servicios o controladores) de las rutas del usuario
-app.use(require('./routes/usuario.js'));
+// app.use(require('./routes/usuario.js'));  // esto se traspado a routes/index.js
+// hacer referencia al archivo login.js (servicios o controladores) de las rutas del usuario
+app.use(require('./routes/index.js'));
 
 
 // conectar a la BD de MONGODB

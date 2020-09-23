@@ -2,17 +2,27 @@ const express = require('express')
 
 // creamos una constante para encriptar contraseña
 const bcrypt = require('bcrypt');
-// undescore para indicar solo los camopos que vamos  a validar
+// undescore para indicar solo los campos que vamos  a validar
 const _ = require('underscore');
 
 // definimos el objeto del modelo del esquema Usuario
 const Usuario = require('../models/usuario');
+// declarar la autentificación del token
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autentificacion.js');
+const usuario = require('../models/usuario');
 
 // inicializarlo express
 const app = express()
 
 // obtener datos de la BD  """"""""""""""""""""""""""""""""""""""""""""""""""""""""
-app.get('/usuario', (req, res) => {
+// vamos a ocupar middlewares se define despues del path,   *****
+app.get('/usuario', verificaToken, (req, res) => {
+
+    //return res.json({    (solo para verificar)
+    //    usuario: req.usuario, // toda la BD
+    //    nombre: req.usuario.nombre, // muestro el nombre
+    //    email: req.usuario.email, //  muestro el email
+    // });
 
     // paginar si no viene la pagina busca desde el primer registro(desde que registro quiero)
     let desde = req.query.desde || 0;
@@ -56,10 +66,10 @@ app.get('/usuario', (req, res) => {
 })
 
 // crear nuevo registro   """"""""""""""""""""""""""""""""""""""""""""""""""""""
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
     //recibimos la informacion del post
     let body = req.body;
-    // creamos u objeto usuario con todos los valores en Usuario que trae MONGOOSE
+    // creamos un objeto usuario con todos los valores en Usuario que trae MONGOOSE
     let usuario = new Usuario({
         nombre: body.nombre,
         email: body.email,
@@ -80,7 +90,6 @@ app.post('/usuario', function(req, res) {
 
         // muestra en el json o mensaje que password es null, asi no muestra el codigo encriptado
         //usuarioDB.password = null
-
 
         // Si esta ok(implicito status 200) la respuesta, devuelve los datos de la BD
         res.json({
@@ -106,7 +115,7 @@ app.post('/usuario', function(req, res) {
 })  */
 
 // actualizar nuevo registro  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""2
-app.put('/usuario/:id', (req, res) => {
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let id = req.params.id;
     // indica los campos que se van a validar
@@ -138,7 +147,7 @@ app.put('/usuario/:id', (req, res) => {
 });
 
 // Borrar  registro  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-app.delete('/usuario/:id', (req, res) => {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     // recupera el id desde la URL (la otra menera es desde body)
     let id = req.params.id; // es el id desde la url que esta arriba
 
