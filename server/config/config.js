@@ -35,3 +35,9 @@ if (process.env.NODE_ENV === 'dev') {
 }
 
 process.env.URLDB = urlDB;
+
+//===========================
+// GOOGLE CLIENT ID
+//===========================}
+
+process.env.CLIENT_ID = process.env.CLIENT_ID || 'adept-mountain-290421.apps.googleusercontent.com';

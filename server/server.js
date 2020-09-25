@@ -4,6 +4,8 @@ require('./config/config');
 const express = require('express')
     // libreria de mongodb
 const mongoose = require('mongoose');
+// Se ingresa el path para publicar sitios
+const path = require('path');
 
 const app = express()
 
@@ -17,10 +19,16 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+// Habilitar la crpeta public para que puedan visualizar las paginas web
+app.use(express.static(path.resolve(__dirname, './public')));
+
+// envia segmentos del path y lo resuleve por nosotros, (revisar la dirección correcta)
+//console.log(path.resolve(__dirname, '../public'));
+
 // AQUI va la Configuración global de rutas """"""""""""""""""""""""22
 // hacer referencia al archivo usuario.js (servicios o controladores) de las rutas del usuario
 // app.use(require('./routes/usuario.js'));  // esto se traspado a routes/index.js
-// hacer referencia al archivo login.js (servicios o controladores) de las rutas del usuario
+// hacer referencia al archivo login.js (servicios o controladores) de las rutas del usuari
 app.use(require('./routes/index.js'));
 
 
