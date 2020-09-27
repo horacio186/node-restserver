@@ -131,11 +131,20 @@ app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     // runValidators: true = es para validar que no se modifiquen los roles que no se encuentren en la BD
     // y todas las validaciones del esquema (error de mongodb) 
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
-        // si hay un error muestra el mensaje y sale con el return
+        // si hay un error de BD muestra el mensaje y sale con el return
         if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
+            });
+        }
+        // Si no encontro el usuario, envio mensaje
+        if (!usuarioBorrado) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario no encontrado'
+                }
             });
         }
         // si esta ok
@@ -162,7 +171,7 @@ app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     Usuario.findByIdAndUpdate(id, cambiaEstado, { new: true }, (err, usuarioBorrado) => {
         // si hay un error muestra el mensaje y sale con el return
         if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             });

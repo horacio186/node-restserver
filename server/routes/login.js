@@ -59,7 +59,7 @@ app.post('/login', (req, res) => {
         // La SEMILLA se configura en config.js (variable de entorno)
         let token = jwt.sign({
             usuario: usuarioDB // información de toda la BD
-        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
+        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN }); // configura en config.js
 
         res.json({
             ok: true,
