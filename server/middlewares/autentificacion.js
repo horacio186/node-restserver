@@ -1,13 +1,16 @@
 const jwt = require('jsonwebtoken');
 
 //===========================
-//  Verificar Token
+//  Verificar Token por headers o por URL
 //===========================
 
 // Si no se ejecuta el next nunca realiza el codigo a continuación del middlewares
 let verificaToken = (req, res, next) => {
 
-    let token = req.get('token'); // nombre que se pone en el HEADERS
+    //let token = req.get('token'); // nombre que se pone en el HEADERS
+    // variable token viene vía url o por cabecera
+    // let token = req.query.token ? req.query.token : req.get('token');
+    let token = req.get('token') || req.query.token;
 
     // process.env.SEED = semilla, variable de entorno global (config.js)
     jwt.verify(token, process.env.SEED, (err, decoded) => {
@@ -57,4 +60,5 @@ module.exports = {
 
     verificaToken,
     verificaAdmin_Role
+
 }

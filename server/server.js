@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // Habilitar la crpeta public para que puedan visualizar las paginas web
-app.use(express.static(path.resolve(__dirname, './public')));
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 // envia segmentos del path y lo resuleve por nosotros, (revisar la dirección correcta)
 //console.log(path.resolve(__dirname, '../public'));
